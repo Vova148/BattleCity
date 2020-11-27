@@ -19,23 +19,6 @@ GLfloat colors[] = {
     0.9f, 0.9f, 0.0f,
 };
 
-const char* vertex_shader =
-"#version 460\n" //версія
-"layout(location = 0) in vec3 vertex_position;"//вхідні дані (позиція вертикса і його колір)
-"layout(location = 1) in vec3 vertex_color;"
-"out vec3 color;"
-"void main() {"
-"   color = vertex_color;"
-"   gl_Position = vec4(vertex_position, 1.0);"
-"}";
-
-const char* fragment_shader =
-"#version 460\n" //версія
-"in vec3 color;"
-"out vec4 frag_color;"
-"void main() {"
-"   frag_color = vec4(color, 1.0);"
-"}";
 int g_windowSizeX = 640;
 int g_windowSizeY = 480;
 
@@ -93,7 +76,8 @@ int main(int argc, char** argv)
             return -1;
 
         }
-
+        
+        resourceManager.loadTexture("DefaultTexture", "res/textures/map_16x16.png");
 
         GLuint points_vbo = 0;
         glGenBuffers(1, &points_vbo);

@@ -19,6 +19,8 @@ namespace Renderer {
 		std::shared_ptr<Renderer::ShaderProgram> loadShaders(const std::string& shaderName, const std::string& vertexPath, const std::string& fragmentPath);
 		//отримання шейдера
 		std::shared_ptr<Renderer::ShaderProgram> getShaderProgram(const std::string& shaderName);
+		//завантаження текстур
+		void loadTexture(const std::string& textureName, const std::string& texturePath);
 	private:
 		std::string getFileString(const std::string& relativeFilePath)const;
 

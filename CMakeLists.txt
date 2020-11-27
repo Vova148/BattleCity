@@ -7,8 +7,11 @@ add_executable(${PROJECT_NAME}
 	src/main.cpp
 	src/Renderer/ShaderProgram.cpp
 	src/Renderer/ShaderProgram.h
+	src/Renderer/Texture2D.cpp
+	src/Renderer/Texture2D.h
 	src/Resource/RecourceManager.cpp
-	src/Resource/RecourceManager.h)
+	src/Resource/RecourceManager.h
+	src/Resource/stb_image.h)
 	
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 
