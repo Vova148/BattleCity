@@ -1,6 +1,7 @@
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
+#include <glm/vec2.hpp>
 
 #include <iostream>
 
@@ -25,13 +26,14 @@ GLfloat texCoord[] = {
     1.0f, 0.0f,
     0.0f, 0.0f
 };
-int g_windowSizeX = 640;
-int g_windowSizeY = 480;
+
+glm::ivec2 g_windowSize(640, 480);
+
 
 void glfwWindowSizeCallback(GLFWwindow* ptrWindow, int weight, int height) {
-    g_windowSizeX = weight;
-    g_windowSizeY = height;
-    glViewport(0,0, g_windowSizeX, g_windowSizeY); //показуємо, де хочемо малювати
+    g_windowSize.x = weight;
+    g_windowSize.y = height;
+    glViewport(0,0, g_windowSize.x, g_windowSize.y); //показуємо, де хочемо малювати
 }
 
 void glfwKeyCallback(GLFWwindow* ptrWindow, int key, int scancode, int action, int mode) {
@@ -52,7 +54,7 @@ int main(int argc, char** argv)
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     /* Create a windowed mode window and its OpenGL context */
-    GLFWwindow* ptrwindow = glfwCreateWindow(g_windowSizeX, g_windowSizeY, "Battle City", nullptr, nullptr); //створення вікна
+    GLFWwindow* ptrwindow = glfwCreateWindow(g_windowSize.x, g_windowSize.y, "Battle City", nullptr, nullptr); //створення вікна
     if (!ptrwindow)
     {
         std::cout << "glfwCreateWindow failed" << std::endl;
