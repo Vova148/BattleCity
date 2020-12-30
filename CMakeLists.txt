@@ -9,6 +9,8 @@ add_executable(${PROJECT_NAME}
 	src/Renderer/ShaderProgram.h
 	src/Renderer/Texture2D.cpp
 	src/Renderer/Texture2D.h
+	src/Renderer/Sprite.cpp
+	src/Renderer/Sprite.h
 	src/Resource/RecourceManager.cpp
 	src/Resource/RecourceManager.h
 	src/Resource/stb_image.h)
