@@ -13,14 +13,27 @@
 #include "stb_image.h"
 
 
+ResourceManager::SharedProgramsMap ResourceManager::m_sharedPrograms;
+ResourceManager::TexturesMap ResourceManager::m_textures;
+ResourceManager::SpritesMap ResourceManager::m_sprites;
+ResourceManager::AnimatedSpritesMap ResourceManager::m_animatedSprites;
+std::string ResourceManager::m_path;
 
-ResourceManager::ResourceManager(const std::string& executablePath) 
+
+void ResourceManager::unloadAllResource()
+{
+	m_sharedPrograms.clear();
+	m_textures.clear();
+	m_sprites.clear();
+	m_animatedSprites.clear();
+}
+void ResourceManager::setExecutablePath(const std::string& executablePath)
 {
 	size_t found = executablePath.find_last_of("/\\");
 	m_path = executablePath.substr(0, found);
 }
 
-std::string ResourceManager::getFileString(const std::string& relativeFilePath)const 
+std::string ResourceManager::getFileString(const std::string& relativeFilePath)
 {
 	std::ifstream f;
 	f.open(m_path + "/" + relativeFilePath.c_str(), std::ios::in | std::ios::binary);
