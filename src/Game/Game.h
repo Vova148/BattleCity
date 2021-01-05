@@ -1,6 +1,10 @@
 #pragma once
 #include <array>
 #include <glm/vec2.hpp>
+#define GLFW_INCLUDE_NONE
+#include <GLFW\glfw3.h>
+
+#include "Tank.h"
 
 class Game {
 public:
@@ -21,4 +25,5 @@ private:
 
 	glm::ivec2 m_windowSize;
 	EGameState m_eCurrentGameState;
+	std::unique_ptr<Tank> m_pTank;
 };

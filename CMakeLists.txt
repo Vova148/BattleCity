@@ -17,7 +17,9 @@ add_executable(${PROJECT_NAME}
 	src/Resource/RecourceManager.h
 	src/Resource/stb_image.h
 	src/Game/Game.cpp
-	src/Game/Game.h)
+	src/Game/Game.h
+	src/Game/Tank.cpp
+	src/Game/Tank.h)
 	
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 
