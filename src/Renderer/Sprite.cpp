@@ -32,7 +32,8 @@ namespace Renderer {
 			0.f, 0.f
 		};
 
-		auto subTexture = pTexture->getSubTexture(std::move(initialSubTexture));
+		auto subTexture = m_pTexture->getSubTexture(std::move(initialSubTexture));
+
 		const GLfloat textureCoords[] = {
 			//U  V
 			subTexture.leftBottomUV.x, subTexture.leftBottomUV.y,

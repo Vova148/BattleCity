@@ -8,11 +8,14 @@
 
 
 #include <iostream>
+#include <chrono>
+#include <string>
 
 #include "Renderer/ShaderProgram.h"
 #include "Resource/RecourceManager.h"
 #include "Renderer/Texture2D.h"
 #include "Renderer/Sprite.h"
+#include "Renderer/AnimatedSprite.h"
 
 
 GLfloat point[] = {
@@ -35,6 +38,7 @@ GLfloat texCoord[] = {
 
 glm::ivec2 g_windowSize(640, 480);
 
+bool isEagle = false;
 
 void glfwWindowSizeCallback(GLFWwindow* ptrWindow, int weight, int height) {
     g_windowSize.x = weight;
@@ -45,6 +49,9 @@ void glfwWindowSizeCallback(GLFWwindow* ptrWindow, int weight, int height) {
 void glfwKeyCallback(GLFWwindow* ptrWindow, int key, int scancode, int action, int mode) {
     if ((key == GLFW_KEY_ESCAPE) && (action == GLFW_PRESS)) {
         glfwSetWindowShouldClose(ptrWindow, GL_TRUE);
+    }
+    if ((key == GLFW_KEY_ENTER) && (action == GLFW_PRESS)) {
+       isEagle = !isEagle;
     }
 }
 int main(int argc, char** argv)
@@ -101,11 +108,43 @@ int main(int argc, char** argv)
         
         auto tex = resourceManager.loadTexture("DefaultTexture", "res/textures/map_16x16.png");
 
-        std::vector<std::string> subTexturesNames = { "block", "topBlock", "bottomBLock", "leftBlock", "rightBlock", "topLeftBlock", "topLeftBlock", "bottomRightBlock", "bottomRightBlock", "beton"};
+        std::vector<std::string> subTexturesNames = { 
+            "eagle",
+            "deadEagle", 
+            "respawn1", 
+            "respawn2", 
+            "respawn3", 
+            "respawn4", 
+            "topLeftBlock",
+            "bottomRightBlock", 
+            "bottomRightBlock", 
+            "beton"};
         auto pTextureAtlas = resourceManager.loadTextureAtlas("DefaultTextureAtlas", "res/textures/map_16x16.png", std::move(subTexturesNames), 16, 16);
 
-        auto pSprite = resourceManager.loadSprite("NewSprite", "DefaultTextureAtlas", "SpriteShader", 100, 100, "topLeftBlock");
+        auto pSprite = resourceManager.loadSprite("NewSprite", "DefaultTextureAtlas", "SpriteShader", 100, 100, "block");
         pSprite->setPosition(glm::vec2(300, 100));
+
+        auto pAnimatedSprite = resourceManager.loadAnimatedSprite("NewAnimatedSprite", "DefaultTextureAtlas", "SpriteShader", 100, 100, "eagle");
+        pAnimatedSprite->setPosition(glm::vec2(300, 300));
+
+        std::vector < std::pair < std::string, uint64_t>> eagleState;
+
+        eagleState.emplace_back(std::make_pair <std::string, uint64_t>("eagle", 1e9));
+        eagleState.emplace_back(std::make_pair <std::string, uint64_t>("deadEagle", 1e9));
+
+       
+        std::vector < std::pair < std::string, uint64_t>> respawnState;
+
+
+        respawnState.emplace_back(std::make_pair <std::string, uint64_t>("respawn1", 1000));
+        respawnState.emplace_back(std::make_pair <std::string, uint64_t>("respawn2", 1000));
+        respawnState.emplace_back(std::make_pair <std::string, uint64_t>("respawn3", 1000));
+        respawnState.emplace_back(std::make_pair <std::string, uint64_t>("respawn4", 1000));
+
+        pAnimatedSprite->insertState("eagleState", std::move(eagleState));
+        pAnimatedSprite->insertState("respawnState", std::move(respawnState));
+
+        pAnimatedSprite->setState(std::basic_string("respawnState"));
 
         GLuint points_vbo = 0;
         glGenBuffers(1, &points_vbo);
@@ -155,9 +194,24 @@ int main(int argc, char** argv)
         pSpriteShaderProgram->setInt("tex", 0);
         pSpriteShaderProgram->setMatrix4("projectionMat", projectionMatrix);
 
+        auto lastTime = std::chrono::high_resolution_clock::now();
+
         /* Loop until the  closes the window */
         while (!glfwWindowShouldClose(ptrwindow))
         {
+            if (isEagle)
+            {
+                pAnimatedSprite->setState(std::basic_string("eagleState"));
+            }
+            else
+            {
+                pAnimatedSprite->setState(std::basic_string("respawnState"));
+            }
+            auto currentTime = std::chrono::high_resolution_clock::now();
+            uint64_t duration = std::chrono::duration_cast<std::chrono::nanoseconds>(currentTime - lastTime).count();
+            lastTime = currentTime;
+            pAnimatedSprite->update(duration);
+       
             /* Render here */
             glClear(GL_COLOR_BUFFER_BIT);
 
@@ -172,6 +226,7 @@ int main(int argc, char** argv)
             glDrawArrays(GL_TRIANGLES, 0, 3);
 
             pSprite->render();
+            pAnimatedSprite->render();
             /* Swap front and back buffers */
             glfwSwapBuffers(ptrwindow);
 
