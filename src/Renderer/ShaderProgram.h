@@ -1,9 +1,11 @@
+#pragma once
+
 #include <iostream>
 #include <glad/glad.h>
 #include <glm/mat4x4.hpp>
 
 
-namespace Renderer {
+namespace RenderEngine {
 	class ShaderProgram {
 	public:
 		ShaderProgram(const std::string& vertexShader, const std::string& fragmentShader);
@@ -19,6 +21,8 @@ namespace Renderer {
 		ShaderProgram& operator=(const ShaderProgram&) = delete;
 		ShaderProgram& operator=(ShaderProgram&&)noexcept;
 		ShaderProgram(ShaderProgram&&)noexcept;
+
+
 	private:	
 		bool createShader(const std::string& source, const GLenum shaderType, GLuint& shaderID); //в параметрах код шейдера, його вид і на вихід його індефікатор
 		bool m_isCompiled = false;

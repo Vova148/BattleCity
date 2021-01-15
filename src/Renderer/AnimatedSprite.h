@@ -6,7 +6,7 @@
 #include <map>
 
 
-namespace Renderer {
+namespace RenderEngine {
 
 	class AnimatedSprite : public Sprite {
 	public:
