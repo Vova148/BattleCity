@@ -54,6 +54,10 @@ namespace RenderEngine {
 			const std::vector<std::string> subTExture,
 			const unsigned int subTextureWidth,
 			const unsigned int subTextureHeight);
+
+		static bool loadJSONResources(const std::string JSONPath);
+
+
 	private:
 		static std::string getFileString(const std::string& relativeFilePath);
 
