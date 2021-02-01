@@ -5,6 +5,7 @@ project(${PROJECT_NAME})
 	
 add_executable(${PROJECT_NAME} 
 	src/main.cpp
+	
 	src/Renderer/ShaderProgram.cpp
 	src/Renderer/ShaderProgram.h
 	src/Renderer/Texture2D.cpp
@@ -23,14 +24,24 @@ add_executable(${PROJECT_NAME}
 	src/Renderer/VertexBufferLayout.h
 	src/Renderer/Renderer.cpp
 	src/Renderer/Renderer.h
+	
 	src/Resource/RecourceManager.cpp
 	src/Resource/RecourceManager.h
 	src/Resource/stb_image.h
+	
 	src/Game/Game.cpp
 	src/Game/Game.h
-	src/Game/Tank.cpp
-	src/Game/Tank.h)
 	
+	src/Game/GameObjects/IGameObject.cpp
+	src/Game/GameObjects/IGameObject.h
+	src/Game/GameObjects/Tank.cpp
+	src/Game/GameObjects/Tank.h
+	src/Game/GameObjects/BrickWall.cpp
+	src/Game/GameObjects/BrickWall.h
+	
+	src/Game/Level.cpp
+	src/Game/Level.h
+	)
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 
 set(GLFW_BUILD_DOCS OFF CACHE BOOL "" FORCE)

@@ -8,6 +8,8 @@
 #include "../Renderer/Texture2D.h"
 #include "../Renderer/Sprite.h"
 #include "../Renderer/AnimatedSprite.h"
+#include "GameObjects/Tank.h"
+#include "Level.h"
 
 #include <iostream>
 
@@ -30,11 +32,19 @@ void Game::render()
     {
         m_pTank->render();
     }
+    if (m_pLevel)
+    {
+        m_pLevel->render();
+    }
 }
 
 void Game::update(const uint64_t delta)
 {
-    //ResourceManager::getAnimatedSprite("NewAnimatedSprite")->update(delta);
+    if (m_pLevel)
+    {
+        m_pLevel->update(delta);
+    }
+
     if (m_pTank)
     {
         if (m_keys[GLFW_KEY_W])
@@ -109,6 +119,8 @@ bool Game::init()
         return false;
     }
 
-    m_pTank = std::make_unique<Tank>(pTanksAnimatedSprite, 0.0000002f, glm::vec2(100.f, 100.f));
+    m_pTank = std::make_unique<Tank>(pTanksAnimatedSprite, 0.0000002f, glm::vec2(0.f, 0.f), glm::vec2(16.f, 16.f));
+
+    m_pLevel = std::make_unique<Level>(ResourceManager::getLevels()[0]);
     return true;
 }
