@@ -18,7 +18,24 @@ std::unique_ptr<Game> g_game = std::make_unique<Game>(g_windowSize);
 void glfwWindowSizeCallback(GLFWwindow* ptrWindow, int weight, int height) {
     g_windowSize.x = weight;
     g_windowSize.y = height;
-    RenderEngine::Renderer::setViewport(weight, height);
+
+    const float map_aspect_ratio = 13.f / 14.f;
+    unsigned int viewPortWidth = g_windowSize.x;
+    unsigned int viewPortHeight = g_windowSize.y;
+    unsigned int viewPortLeftOffset = 0;
+    unsigned int viewPortBottomOffset = 0;
+
+    if (static_cast<float>(g_windowSize.x) / g_windowSize.y > map_aspect_ratio)
+    {
+        viewPortWidth = static_cast<unsigned int>(g_windowSize.y * map_aspect_ratio);
+        viewPortLeftOffset = (g_windowSize.x - viewPortWidth) / 2;
+    }
+    else
+    {
+        viewPortHeight = static_cast<unsigned int>(g_windowSize.x / map_aspect_ratio);
+        viewPortLeftOffset = (g_windowSize.y - viewPortWidth) / 2;
+    }
+    RenderEngine::Renderer::setViewport(viewPortWidth, viewPortHeight, viewPortLeftOffset, viewPortBottomOffset);
 }
 
 void glfwKeyCallback(GLFWwindow* ptrWindow, int key, int scancode, int action, int mode) {
