@@ -43,7 +43,7 @@ public:
 		Destroyed
 	};
 
-	enum class EBrickLocation {
+	enum class EBlockLocation {
 		TopLeft,
 		TopRight,
 		BottomLeft,
@@ -55,8 +55,9 @@ public:
 	virtual void update(const uint64_t delta)override;
 
 private:
-	void renderBrick(const EBrickLocation eBrickLocation) const;
+	void renderBrick(const EBlockLocation eBrickLocation) const;
 
+	std::array<glm::vec2, 4> m_blockOffets;
 	std::array<EBrickWallState, 4> m_eCurrentBrickState;
 	std::array<std::shared_ptr<RenderEngine::Sprite>, 15> m_sprites;
 };

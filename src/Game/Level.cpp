@@ -1,16 +1,17 @@
 #include "Level.h"
+
 #include "GameObjects/BrickWall.h"
+#include "GameObjects/BetonWall.h"
 
 #include <iostream>
 
 unsigned int BLOCK_SIZE = 16;
 
-std::shared_ptr<IGameObject> createGameObjectFromDiscription(const char discription, const glm::vec2& position, const glm::vec2& size, const float rotation)
+std::shared_ptr<IGameObject> createGameObjectFromDescription(const char discription, const glm::vec2& position, const glm::vec2& size, const float rotation)
 {
 	switch (discription)
 	{
 	case '0': 
-		
 		return std::make_shared<BrickWall>(BrickWall::EBrickWallType::Right, position, size, rotation);
 	case '1':
 		return std::make_shared<BrickWall>(BrickWall::EBrickWallType::Bottom, position, size, rotation);
@@ -28,8 +29,19 @@ std::shared_ptr<IGameObject> createGameObjectFromDiscription(const char discript
 		return std::make_shared<BrickWall>(BrickWall::EBrickWallType::TopLeft, position, size, rotation);
 	case 'J':
 		return std::make_shared<BrickWall>(BrickWall::EBrickWallType::TopRight, position, size, rotation);
+	case '5':
+		return std::make_shared<BetonWall>(BetonWall::EBlockWallType::Right, position, size, rotation);
+	case '6':
+		return std::make_shared<BetonWall>(BetonWall::EBlockWallType::Bottom, position, size, rotation);
+	case '7':
+		return std::make_shared<BetonWall>(BetonWall::EBlockWallType::Left, position, size, rotation);
+	case '8':
+		return std::make_shared<BetonWall>(BetonWall::EBlockWallType::Top, position, size, rotation);
+	case '9':
+		return std::make_shared<BetonWall>(BetonWall::EBlockWallType::All, position, size, rotation);
 	case 'D':
 		return nullptr;
+
 
 	default:
 		std::cerr << "Unknown GameObjectdescription: " << discription << std::endl;
@@ -38,26 +50,24 @@ std::shared_ptr<IGameObject> createGameObjectFromDiscription(const char discript
 	return nullptr;
 }
 
-Level::Level(const std::vector<std::string>& LevelDiscription)
+Level::Level(const std::vector<std::string>& levelDescription)
 {
-	if (LevelDiscription.empty())
+	if (levelDescription.empty())
 	{
-		std::cerr << "Empty level description! " << std::endl;
+		std::cerr << "Empty level description!" << std::endl;
 	}
 
-	m_width = LevelDiscription[0].length();
-	m_height = LevelDiscription[0].size();
+	m_width = levelDescription[0].length();
+	m_height = levelDescription.size();
 
 	m_mapObjects.reserve(m_width * m_height);
-	unsigned int currentBottomOffset = static_cast<unsigned int>(BLOCK_SIZE) * (m_height - 1);
-
-	for (const std::string& currentRow : LevelDiscription)
+	unsigned int currentBottomOffset = static_cast<unsigned int>(BLOCK_SIZE * (m_height - 1));
+	for (const std::string& currentRow : levelDescription)
 	{
 		unsigned int currentLeftOffset = 0;
 		for (const char currentElement : currentRow)
 		{
-			m_mapObjects.emplace_back(createGameObjectFromDiscription(currentElement, glm::vec2(currentLeftOffset, currentBottomOffset), glm::vec2(BLOCK_SIZE, BLOCK_SIZE), 0.f));
-
+			m_mapObjects.emplace_back(createGameObjectFromDescription(currentElement, glm::vec2(currentLeftOffset, currentBottomOffset), glm::vec2(BLOCK_SIZE, BLOCK_SIZE), 0.f));
 			currentLeftOffset += BLOCK_SIZE;
 		}
 		currentBottomOffset -= BLOCK_SIZE;
