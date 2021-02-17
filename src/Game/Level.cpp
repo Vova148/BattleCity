@@ -10,7 +10,7 @@
 
 #include <iostream>
 
-unsigned int BLOCK_SIZE = 16;
+
 
 std::shared_ptr<IGameObject> createGameObjectFromDescription(const char discription, const glm::vec2& position, const glm::vec2& size, const float rotation)
 {
@@ -73,6 +73,12 @@ Level::Level(const std::vector<std::string>& levelDescription)
 	m_width = levelDescription[0].length();
 	m_height = levelDescription.size();
 
+	m_playerRespawn_1 = { BLOCK_SIZE * (m_width / 2 - 1), BLOCK_SIZE / 2 };
+	m_playerRespawn_2 = { BLOCK_SIZE * (m_width / 2 + 3), BLOCK_SIZE / 2 };
+	m_enemyRespawn_1 = { BLOCK_SIZE, BLOCK_SIZE * m_height  - BLOCK_SIZE / 2 };
+	m_enemyRespawn_2 = { BLOCK_SIZE * (m_width / 2 + 1), BLOCK_SIZE * m_height - BLOCK_SIZE / 2 };
+	m_enemyRespawn_3 = { BLOCK_SIZE * m_width, BLOCK_SIZE * m_height - BLOCK_SIZE / 2 };
+
 	m_mapObjects.reserve(m_width * m_height + 4);
 	unsigned int currentBottomOffset = static_cast<unsigned int>(BLOCK_SIZE * (m_height - 1) + BLOCK_SIZE / 2.f);
 	for (const std::string& currentRow : levelDescription)
@@ -80,7 +86,28 @@ Level::Level(const std::vector<std::string>& levelDescription)
 		unsigned int currentLeftOffset = BLOCK_SIZE;
 		for (const char currentElement : currentRow)
 		{
-			m_mapObjects.emplace_back(createGameObjectFromDescription(currentElement, glm::vec2(currentLeftOffset, currentBottomOffset), glm::vec2(BLOCK_SIZE, BLOCK_SIZE), 0.f));
+			switch (currentElement)
+			{
+			case 'K':
+				m_playerRespawn_1 = { currentLeftOffset, currentBottomOffset };
+				break;
+			case 'L':
+				m_playerRespawn_2 = { currentLeftOffset, currentBottomOffset };
+				break;
+			case 'M':
+				m_enemyRespawn_1 = { currentLeftOffset, currentBottomOffset };
+				break;
+			case 'N':
+				m_enemyRespawn_2 = { currentLeftOffset, currentBottomOffset };
+				break;
+			case 'O':
+				m_enemyRespawn_3 = { currentLeftOffset, currentBottomOffset };
+				break;
+			default:
+				m_mapObjects.emplace_back(createGameObjectFromDescription(currentElement, glm::vec2(currentLeftOffset, currentBottomOffset), glm::vec2(BLOCK_SIZE, BLOCK_SIZE), 0.f));
+				break;
+			}
+			
 			currentLeftOffset += BLOCK_SIZE;
 		}
 		currentBottomOffset -= BLOCK_SIZE;
