@@ -9,6 +9,7 @@
 #include "Resource/RecourceManager.h"
 #include "Game/Game.h"
 #include "Renderer/Renderer.h"
+#include "Physics/PhysicsEngine.h"
 
 
 glm::ivec2 g_windowSize(13*16, 14*16);
@@ -85,7 +86,9 @@ int main(int argc, char** argv)
     RenderEngine::Renderer::setDepthTest(true);
     {
         ResourceManager::setExecutablePath(argv[0]);
+        Physics::PhysicsEngine::intit();
         g_game->init();
+
         auto lastTime = std::chrono::high_resolution_clock::now();
         glfwSetWindowSize(ptrwindow, static_cast<int>(2 * g_game->getCurrentLevelWidth()), static_cast<int>(2 * g_game->getCurrentLevelHeight()));
         
@@ -100,6 +103,7 @@ int main(int argc, char** argv)
             double duration = std::chrono::duration<double, std::milli>(currentTime - lastTime).count();
             lastTime = currentTime;
             g_game->update(duration);
+            Physics::PhysicsEngine::update(duration);
 
             /* Render here */
             RenderEngine::Renderer::clear();

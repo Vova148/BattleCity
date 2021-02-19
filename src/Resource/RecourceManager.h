@@ -22,6 +22,7 @@ namespace RenderEngine {
 		ResourceManager(const ResourceManager&) = delete;
 		ResourceManager(ResourceManager&&) = delete;
 		ResourceManager& operator=(const ResourceManager&) = delete;
+		ResourceManager& operator=(const ResourceManager&&) = delete;
 
 		//завантаження шейдерів
 		static std::shared_ptr<RenderEngine::ShaderProgram> loadShaders(const std::string& shaderName, const std::string& vertexPath, const std::string& fragmentPath);
