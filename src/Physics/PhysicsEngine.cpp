@@ -40,11 +40,12 @@ namespace Physics {
 				for (const auto& currentObjectToCheck : ObjectToCheck)
 				{
 					const auto& collidersToCheck = currentObjectToCheck->getColliders();
-					if (!collidersToCheck.empty())
+					if (currentObjectToCheck->colliders(currentObject->getObjectType()) && !collidersToCheck.empty())
 					{
 						if (hasIntersection(colliders, newPosition, collidersToCheck, currentObjectToCheck->getCurrentPosition()))
 						{
 							hasCollision = true;
+							currentObjectToCheck->onCollision();
 							break;
 						}
 					}
@@ -64,6 +65,7 @@ namespace Physics {
 					{
 						currentObject->getCurrentPosition() = glm::vec2(currentObject->getCurrentPosition().x, static_cast<unsigned int>(currentObject->getCurrentPosition().y / 8.f + 0.5f) * 8.f);
 					}
+					currentObject->onCollision();
 				}
 			}
 		}
@@ -94,23 +96,24 @@ namespace Physics {
 
 				if (currentCollider1_bottomLeft_world.x >= currentCollider2_topRight_world.x)
 				{
-					return false;
+					continue;
 				}
 				if (currentCollider1_topRight_world.x <= currentCollider2_bottomLeft_world.x)
 				{
-					return false;
+					continue;
 				}
 
 				if (currentCollider1_bottomLeft_world.y >= currentCollider2_topRight_world.y)
 				{
-					return false;
+					continue;
 				}
 				if (currentCollider1_topRight_world.y <= currentCollider2_bottomLeft_world.y)
 				{
-					return false;
+					continue;
 				}
+				return true;
 			}
 		}
-		return true;
+		return false;
 	}
 }

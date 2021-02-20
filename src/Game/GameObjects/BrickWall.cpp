@@ -4,7 +4,7 @@
 #include "../../Resource/RecourceManager.h"
 
 BrickWall::BrickWall(const EBrickWallType eBrickWallType, const glm::vec2& position, const glm::vec2& size, const float rotation, const float layer)
-	: IGameObject(position, size, rotation, layer)
+	: IGameObject(IGameObject::EObjectType::BrickWall, position, size, rotation, layer)
 	, m_eCurrentBrickState{ EBrickWallState::Destroyed,
 							EBrickWallState::Destroyed,
 							EBrickWallState::Destroyed,

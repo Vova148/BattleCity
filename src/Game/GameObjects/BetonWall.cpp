@@ -4,7 +4,7 @@
 #include "../../Resource/RecourceManager.h"
 
 BetonWall::BetonWall(const EBlockWallType eBlockWallType, const glm::vec2& position, const glm::vec2& size, const float rotation, const float layer)
-	: IGameObject(position, size, rotation, layer)
+	: IGameObject(IGameObject::EObjectType::BetonWall, position, size, rotation, layer)
 	, m_eCurrentBlockState{ EBlockWallState::Destroyed,
 							EBlockWallState::Destroyed,
 							EBlockWallState::Destroyed,
