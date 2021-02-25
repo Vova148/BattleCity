@@ -8,6 +8,7 @@
 
 class Tank;
 class Level;
+class StartScreen;
 
 class Game {
 public:
@@ -18,18 +19,23 @@ public:
 	void update(const double delta);
 	void setKey(const int key, const int action);
 	bool init();
-	size_t getCurrentLevelWidth()const;
-	size_t getCurrentLevelHeight()const;
+	unsigned int getCurrentWidth()const;
+	unsigned int getCurrentHeight()const;
 
 private:
 	std::array<bool, 349> m_keys;
 	enum EGameState {
-		Active,
-		Pause
+		startScreen,
+		LevelStart,
+		CurrentLevel,
+		Pause,
+		Scores,
+		GameOver
 	};
 
 	glm::ivec2 m_windowSize;
 	EGameState m_eCurrentGameState;
 	std::shared_ptr<Tank> m_pTank;
 	std::shared_ptr<Level> m_pLevel;
+	std::shared_ptr<StartScreen> m_pStartScreen;
 };

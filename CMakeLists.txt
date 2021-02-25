@@ -32,6 +32,13 @@ add_executable(${PROJECT_NAME}
 	src/Game/Game.cpp
 	src/Game/Game.h
 	
+	src/Game/GameStates/IGameState.cpp
+	src/Game/GameStates/IGameState.h
+	src/Game/GameStates/StartScreen.cpp
+	src/Game/GameStates/StartScreen.h
+	src/Game/GameStates/Level.cpp
+	src/Game/GameStates/Level.h
+	
 	src/System/Timer.cpp
 	src/System/Timer.h
 	
@@ -59,8 +66,7 @@ add_executable(${PROJECT_NAME}
 	src/Game/GameObjects/Bullet.cpp
 	src/Game/GameObjects/Bullet.h
 	
-	src/Game/Level.cpp
-	src/Game/Level.h
+	
 	)
 target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_17)
 
