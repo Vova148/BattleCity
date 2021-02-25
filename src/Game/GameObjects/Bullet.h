@@ -27,7 +27,6 @@ public:
 	virtual void render()const override;
 	bool isActive() const { return m_isActive; }
 	void fire(const glm::vec2& position, const glm::vec2& direction);
-	virtual void onCollision()override;
 
 private:
 	glm::vec2 m_explosionSize;
@@ -42,5 +41,5 @@ private:
 	Timer m_explosionTimer;
 	bool m_isActive;
 	double m_maxVelocity;
-	bool m_isExplosin;
+	bool m_isExplosion;
 };

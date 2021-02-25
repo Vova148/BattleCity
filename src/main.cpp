@@ -86,7 +86,7 @@ int main(int argc, char** argv)
     RenderEngine::Renderer::setDepthTest(true);
     {
         ResourceManager::setExecutablePath(argv[0]);
-        Physics::PhysicsEngine::intit();
+        Physics::PhysicsEngine::init();
         g_game->init();
 
         auto lastTime = std::chrono::high_resolution_clock::now();

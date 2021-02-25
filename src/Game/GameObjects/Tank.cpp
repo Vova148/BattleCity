@@ -45,7 +45,7 @@ Tank::Tank( const double maxVelocity,
 
 	m_colliders.emplace_back(glm::vec2(0), m_size);
 
-	Physics::PhysicsEngine::addDynamicGamebject(m_pCurrentBullet);
+	Physics::PhysicsEngine::addDynamicGameObject(m_pCurrentBullet);
 }
 
 void Tank::render()const
@@ -173,6 +173,6 @@ void Tank::fire()
 	if (!m_isSpawning && !m_pCurrentBullet->isActive())
 	{
 		m_pCurrentBullet->fire(m_position + m_size / 4.f + m_size * m_direction / 4.f, m_direction);
-		Physics::PhysicsEngine::addDynamicGamebject(m_pCurrentBullet);
+		Physics::PhysicsEngine::addDynamicGameObject(m_pCurrentBullet);
 	}
 }

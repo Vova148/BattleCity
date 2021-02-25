@@ -112,7 +112,7 @@ bool Game::init()
 
 
     m_pTank = std::make_shared<Tank>(0.05, m_pLevel->getPlayerRespawn_1(), glm::vec2(Level::BLOCK_SIZE, Level::BLOCK_SIZE), 0.f);
-    Physics::PhysicsEngine::addDynamicGamebject(m_pTank);
+    Physics::PhysicsEngine::addDynamicGameObject(m_pTank);
     return true;
 }
 
