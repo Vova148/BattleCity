@@ -79,7 +79,9 @@ void Game::startNewLevel(const size_t level)
 
 void Game::update(const double delta)
 {
-    switch (m_eCurrentGameState)
+    m_pCurrentGameState->processInput(m_keys);
+    m_pCurrentGameState->update(delta);
+   /* switch (m_eCurrentGameState)
     {
     case Game::startScreen:
         if (m_keys[GLFW_KEY_ENTER])
@@ -91,15 +93,14 @@ void Game::update(const double delta)
     case Game::LevelStart:
         break;
     case Game::CurrentLevel:
-        m_pCurrentGameState->processInput(m_keys);
-        m_pCurrentGameState->update(delta);
+        
     case Game::Pause:
         break;
     case Game::Scores:
         break;
     case Game::GameOver:
         break;
-    }
+    }*/
    
 }
 
@@ -122,7 +123,7 @@ bool Game::init()
     m_pSpriteShaderProgram->use();
     m_pSpriteShaderProgram->setInt("tex", 0);
 
-    m_pCurrentGameState = std::make_shared<StartScreen>(ResourceManager::getStartScreen());
+    m_pCurrentGameState = std::make_shared<StartScreen>(ResourceManager::getStartScreen(), this);
     setWindowSize(m_windowSize);
 
     return true;

@@ -289,7 +289,7 @@ bool ResourceManager::loadJSONResources(const std::string JSONPath)
 			}
 		}
 	}
-	auto startScreenIt = document.FindMember("startScreen");
+	auto startScreenIt = document.FindMember("start_screen");
 	if (startScreenIt != document.MemberEnd())
 	{
 		const auto descriptionArray = startScreenIt->value.GetArray();
