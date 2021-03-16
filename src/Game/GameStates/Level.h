@@ -1,8 +1,10 @@
 #pragma once
 
 #include <vector>
+#include <set>
 #include <string>
 #include <memory>
+
 
 #include <glm/vec2.hpp>
 
@@ -44,4 +46,5 @@ private:
 
 	std::vector<std::shared_ptr<IGameObject>> m_mapObjects;
 	std::shared_ptr<Tank> m_pTank;
+	std::set<std::shared_ptr<Tank>> m_enemyTanks;
 };
