@@ -68,7 +68,8 @@ std::shared_ptr<IGameObject> createGameObjectFromDescription(const char discript
 	return nullptr;
 }
 
-Level::Level(const std::vector<std::string>& levelDescription)
+Level::Level(const std::vector<std::string>& levelDescription, const Game::EGameMode eGameMode)
+	: m_eGameMode(eGameMode)
 {
 	if (levelDescription.empty())
 	{
@@ -138,8 +139,18 @@ Level::Level(const std::vector<std::string>& levelDescription)
 }
 void Level::initPhysics()
 {
-	m_pTank = std::make_shared<Tank>(Tank::ETankType::Player1Yellow_type1, false, true, Tank::EOrientation::Top, 0.05, getPlayerRespawn_1(), glm::vec2(Level::BLOCK_SIZE, Level::BLOCK_SIZE), 0.f);
-	Physics::PhysicsEngine::addDynamicGameObject(m_pTank);
+	switch (m_eGameMode)
+	{
+	case Game::EGameMode::TwoPlayer:
+		m_pTank2 = std::make_shared<Tank>(Tank::ETankType::Player1Yellow_type1, false, true, Tank::EOrientation::Top, 0.05, getPlayerRespawn_2(), glm::vec2(Level::BLOCK_SIZE, Level::BLOCK_SIZE), 0.f);
+		Physics::PhysicsEngine::addDynamicGameObject(m_pTank2);
+	case Game::EGameMode::OnePlayer:
+		m_pTank1 = std::make_shared<Tank>(Tank::ETankType::Player1Yellow_type3, false, true, Tank::EOrientation::Top, 0.05, getPlayerRespawn_1(), glm::vec2(Level::BLOCK_SIZE, Level::BLOCK_SIZE), 0.f);
+		Physics::PhysicsEngine::addDynamicGameObject(m_pTank1);
+	default:
+		break;
+	}	
+	
 
 	m_enemyTanks.emplace(std::make_shared<Tank>(Tank::ETankType::EnemyWhite_type1, true, false, Tank::EOrientation::Bottom, 0.05, getEnemyRespawn_1(), glm::vec2(Level::BLOCK_SIZE, Level::BLOCK_SIZE), 0.f));
 	m_enemyTanks.emplace(std::make_shared<Tank>(Tank::ETankType::EnemyWhite_type2, true, false, Tank::EOrientation::Bottom, 0.05, getEnemyRespawn_2(), glm::vec2(Level::BLOCK_SIZE, Level::BLOCK_SIZE), 0.f));
@@ -160,7 +171,16 @@ void Level::render()const
 		}
 	}
 
-	m_pTank->render();
+	switch (m_eGameMode)
+	{
+	case Game::EGameMode::TwoPlayer:
+		m_pTank2->render();
+	case Game::EGameMode::OnePlayer:
+		m_pTank1->render();
+	
+	default:
+		break;
+	}
 
 	for (const auto& currentTank : m_enemyTanks)
 	{
@@ -177,7 +197,16 @@ void Level::update(double delta)
 			currentMapObject->update(delta);
 		}
 	}
-	m_pTank->update(delta);
+
+	switch (m_eGameMode)
+	{
+	case Game::EGameMode::TwoPlayer:
+		m_pTank2->update(delta);
+	case Game::EGameMode::OnePlayer:
+		m_pTank1->update(delta);
+	default:
+		break;
+	}
 
 	for (const auto& currentTank : m_enemyTanks)
 	{
@@ -187,36 +216,73 @@ void Level::update(double delta)
 
 void Level::processInput(std::array<bool, 349>& keys)
 {
+	switch (m_eGameMode)
+	{
+	case Game::EGameMode::TwoPlayer:
+		if (keys[GLFW_KEY_I])
+		{
+			m_pTank2->setOrientation(Tank::EOrientation::Top);
+			m_pTank2->setVelocity(m_pTank2->getMaxVelocity());
+		}
+		else if (keys[GLFW_KEY_J])
+		{
+			m_pTank2->setOrientation(Tank::EOrientation::Left);
+			m_pTank2->setVelocity(m_pTank2->getMaxVelocity());
+		}
+		else if (keys[GLFW_KEY_K])
+		{
+			m_pTank2->setOrientation(Tank::EOrientation::Bottom);
+			m_pTank2->setVelocity(m_pTank2->getMaxVelocity());
+		}
+		else if (keys[GLFW_KEY_L])
+		{
+			m_pTank2->setOrientation(Tank::EOrientation::Right);
+			m_pTank2->setVelocity(m_pTank2->getMaxVelocity());
+		}
+		else
+		{
+			m_pTank2->setVelocity(0);
+		}
 
-	if (keys[GLFW_KEY_W])
-	{
-		m_pTank->setOrientation(Tank::EOrientation::Top);
-		m_pTank->setVelocity(m_pTank->getMaxVelocity());
-	}
-	else if (keys[GLFW_KEY_A])
-	{
-		m_pTank->setOrientation(Tank::EOrientation::Left);
-		m_pTank->setVelocity(m_pTank->getMaxVelocity());
-	}
-	else if (keys[GLFW_KEY_S])
-	{
-		m_pTank->setOrientation(Tank::EOrientation::Bottom);
-		m_pTank->setVelocity(m_pTank->getMaxVelocity());
-	}
-	else if (keys[GLFW_KEY_D])
-	{
-		m_pTank->setOrientation(Tank::EOrientation::Right);
-		m_pTank->setVelocity(m_pTank->getMaxVelocity());
-	}
-	else
-	{
-		m_pTank->setVelocity(0);
-	}
+		if (m_pTank2 && keys[GLFW_KEY_P])
+		{
+			m_pTank2->fire();
+		}
+	case Game::EGameMode::OnePlayer:
+		if (keys[GLFW_KEY_W])
+		{
+			m_pTank1->setOrientation(Tank::EOrientation::Top);
+			m_pTank1->setVelocity(m_pTank1->getMaxVelocity());
+		}
+		else if (keys[GLFW_KEY_A])
+		{
+			m_pTank1->setOrientation(Tank::EOrientation::Left);
+			m_pTank1->setVelocity(m_pTank1->getMaxVelocity());
+		}
+		else if (keys[GLFW_KEY_S])
+		{
+			m_pTank1->setOrientation(Tank::EOrientation::Bottom);
+			m_pTank1->setVelocity(m_pTank1->getMaxVelocity());
+		}
+		else if (keys[GLFW_KEY_D])
+		{
+			m_pTank1->setOrientation(Tank::EOrientation::Right);
+			m_pTank1->setVelocity(m_pTank1->getMaxVelocity());
+		}
+		else
+		{
+			m_pTank1->setVelocity(0);
+		}
 
-	if (m_pTank && keys[GLFW_KEY_SPACE])
-	{
-		m_pTank->fire();
+		if (m_pTank1 && keys[GLFW_KEY_SPACE])
+		{
+			m_pTank1->fire();
+		}
+	
+	default:
+		break;
 	}
+	
 }
 
 unsigned int Level::getStateWidth()const

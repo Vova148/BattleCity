@@ -9,6 +9,7 @@
 #include <glm/vec2.hpp>
 
 #include "IGameState.h"
+#include "../Game.h"
 
 class IGameObject;
 class Tank;
@@ -16,7 +17,9 @@ class Tank;
 class Level : public IGameState {
 public:
 	static constexpr unsigned int BLOCK_SIZE = 16;
-	Level(const std::vector<std::string>& LevelDiscription);
+
+	Level(const std::vector<std::string>& LevelDiscription, const Game::EGameMode eGameMode);
+
 	virtual void render()const override;
 	virtual void update(double delta) override;
 	virtual unsigned int getStateWidth()const override;
@@ -45,6 +48,9 @@ private:
 	glm::ivec2 m_enemyRespawn_3;
 
 	std::vector<std::shared_ptr<IGameObject>> m_mapObjects;
-	std::shared_ptr<Tank> m_pTank;
+	std::shared_ptr<Tank> m_pTank1;
+	std::shared_ptr<Tank> m_pTank2;
 	std::set<std::shared_ptr<Tank>> m_enemyTanks;
+
+	Game::EGameMode m_eGameMode;
 };

@@ -22,6 +22,7 @@
 Game::Game(const glm::uvec2& windowSize)
 	: m_eCurrentGameState(EGameState::startScreen)
     , m_windowSize(windowSize)
+    , m_currentLevelIndex(0)
 {
 	m_keys.fill(false);
 }
@@ -69,39 +70,25 @@ void Game::updateViewport()
 }
 
 
-void Game::startNewLevel(const size_t level)
+void Game::startNewLevel(const size_t level, const EGameMode eGameMode)
 {
-    auto pLevel = std::make_shared<Level>(ResourceManager::getLevels()[level]);
+    m_currentLevelIndex = level;
+    auto pLevel = std::make_shared<Level>(ResourceManager::getLevels()[m_currentLevelIndex], eGameMode);
     m_pCurrentGameState = pLevel;
     Physics::PhysicsEngine::setCurrentLevel(pLevel);
     updateViewport();
+}
+
+void Game::nextLevel(const EGameMode eGameMode)
+{
+    startNewLevel(++m_currentLevelIndex, eGameMode);
 }
 
 void Game::update(const double delta)
 {
     m_pCurrentGameState->processInput(m_keys);
     m_pCurrentGameState->update(delta);
-   /* switch (m_eCurrentGameState)
-    {
-    case Game::startScreen:
-        if (m_keys[GLFW_KEY_ENTER])
-        {
-            m_eCurrentGameState = EGameState::CurrentLevel;
-            startNewLevel(1);
-        }
-        break;
-    case Game::LevelStart:
-        break;
-    case Game::CurrentLevel:
-        
-    case Game::Pause:
-        break;
-    case Game::Scores:
-        break;
-    case Game::GameOver:
-        break;
-    }*/
-   
+ 
 }
 
 void Game::setKey(const int key, const int action)
